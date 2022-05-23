@@ -42,15 +42,13 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
-    
-    develop: {
-      port: 8545
-    },
+    development: {
+      host: "127.0.0.1",     // Localhost (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
+      gas: 30000000,
+      from: '0x02582591F6401bCCA43a677A970148E040926524',     // will be changed  
+     },
 
     // Another network with more advanced options...
     // advanced: {
@@ -86,6 +84,8 @@ module.exports = {
     // timeout: 100000
   },
 
+  contracts_directory: './testing/',
+  contracts_build_directory: './src/build/',
   // Configure your compilers
   compilers: {
     solc: {
@@ -98,6 +98,13 @@ module.exports = {
       //  },
       //  evmVersion: "byzantium"
       // }
+      version: "0.6.6",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 100
+        }
+      }
     }
   }
 }
