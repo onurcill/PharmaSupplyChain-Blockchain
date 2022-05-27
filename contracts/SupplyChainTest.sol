@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 import './RawMaterial.sol';
@@ -20,7 +21,7 @@ contract SupplyChain {
     
     address Owner;
     
-    constructor() public {
+    constructor() {
         Owner = msg.sender;
     }
     
@@ -98,7 +99,7 @@ contract SupplyChain {
 
         RawMaterial rawMaterial = new RawMaterial(
             msg.sender,
-            address(bytes20(sha256(abi.encodePacked(msg.sender, now)))),
+            address(bytes20(sha256(abi.encodePacked(msg.sender, block.timestamp)))),
             _description,
             _quantity,
             _transporterAddr,
@@ -171,7 +172,7 @@ contract SupplyChain {
             
         RawMaterial(_addr).receivedPackage(_manufacturerAddress);
         manufacturerRawMaterials[_manufacturerAddress].push(_addr);
-        emit receivedEvent(msg.sender, _sellerAddr, _addr, signature, now);
+        emit receivedEvent(msg.sender, _sellerAddr, _addr, signature, block.timestamp);
     }
     
     

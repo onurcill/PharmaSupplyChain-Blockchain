@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 import './RawMaterial.sol';
@@ -15,12 +16,11 @@ import './Customer.sol';
 
 //// New supply chain : supplier -> transporter -> manufacturer -> transporter -> whole-saler -> transporter -> distributor -> transporter -> customer/hospital/pharmacy
 
-
 contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distributor, Customer {
     
     address public Owner;
     
-    constructor() public {
+    constructor() {
         Owner = msg.sender;
     }
     
@@ -43,7 +43,6 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         distributor,
         customer
     }
-    
     
     //////////////// Events ////////////////////
     
@@ -84,9 +83,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         return userInfo[_address];
     }
     
-
     /////////////// Supplier //////////////////////
-    
     
     function supplierCreatesRawPackage(
         bytes32 _description,
@@ -107,18 +104,14 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     
     function supplierGetPackageCount() external view returns(uint) {
         require(userInfo[msg.sender].role == roles.supplier, "Role=>Supplier can use this function");
-        
         return getNoOfPackagesOfSupplier();
     }
     
     function supplierGetRawMaterialAddresses() external view returns(address[] memory) {
-        address[] memory ret = getAllPackages();
-        return ret;
+        return getAllPackages();
     }
     
-    
     ///////////////  Transporter ///////////////
-    
     
     function transporterHandlePackage(
         address _address,
@@ -128,22 +121,19 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
             
         require(
             userInfo[msg.sender].role == roles.transporter,
-            "Only Transporter can call this function"
+            "Only Transporter !"
         );
         require(
             transporterType > 0,
             "Transporter Type is incorrect"
         );
-        
         handlePackage(_address, transporterType, cid);
     }
     
-    
     ///////////////  Manufacturer ///////////////
     
-    
     function manufacturerReceivedRawMaterials(address _addr) external {
-        require(userInfo[msg.sender].role == roles.manufacturer, "Only Manufacturer can access this function");
+        require(userInfo[msg.sender].role == roles.manufacturer, "Only Manufacturer !");
         manufacturerReceivedPackage(_addr, msg.sender);
     }
     
@@ -168,22 +158,18 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
             _receiverAddr,
             RcvrType
         );
-        
         return "Medicine created!";
     }
-    
 
     ///////////////  Wholesaler  ///////////////
 
-    
     function wholesalerReceivedMedicine(
         address _address
         ) external {
         require(
             userInfo[msg.sender].role == roles.wholesaler || userInfo[msg.sender].role == roles.distributor,
-            "Only Wholesaler and Distributor can call this function"
+            "Only Wholesaler and Distributor !"
         );
-        
         medicineRecievedAtWholesaler(
             _address
         );
@@ -196,9 +182,8 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         require(
             userInfo[msg.sender].role == roles.wholesaler &&
             msg.sender == Medicine(_address).getWDC()[0],
-            "Only Wholesaler or current owner of package can call this function"
+            "Only Wholesaler or current owner of package !"
         );
-        
         transferMedicineWtoD(
             _address,
             transporter,
@@ -209,7 +194,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     function getBatchIdByIndexWD(uint index) external view returns(address packageID) {
         require(
             userInfo[msg.sender].role == roles.wholesaler,
-            "Only Wholesaler Can call this function."
+            "Only Wholesaler !"
         );
         return MedicineWtoD[msg.sender][index];
     }
@@ -218,9 +203,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         return MedicineWtoDTxContract[_address];
     }
 
-
     ///////////////  Distributor  ///////////////
-
 
     function distributorReceivedMedicine(
       address _address,
@@ -229,9 +212,8 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         require(
             userInfo[msg.sender].role == roles.distributor &&
             msg.sender == Medicine(_address).getWDC()[1],
-            "Only Distributor or current owner of package can call this function"  
+            "Only Distributor or current owner of package !"  
         );
-        
         medicineRecievedAtDistributor(
             _address,
             cid
@@ -246,7 +228,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         require(
             userInfo[msg.sender].role == roles.distributor &&
             msg.sender == Medicine(_address).getWDC()[1],
-            "Only Distributor or current owner of package can call this function"
+            "Only Distributor or current owner of package !"
         );
         transferMedicineDtoC(_address, transporter, receiver);
     }
@@ -254,7 +236,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     function getBatchesCountDC() external view returns (uint count){
         require(
             userInfo[msg.sender].role == roles.distributor,
-            "Only Distributor Can call this function."
+            "Only Distributor!"
         );
         return MedicineDtoC[msg.sender].length;
     }
@@ -271,9 +253,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         return MedicineDtoCTxContract[_address];
     }
     
-    
-    ///////////////  Customer  ///////////////
-    
+    ///////////////  Customer  ///////////////  
     
     function customerReceivedMedicine(
         address _address,
@@ -281,7 +261,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     ) external {
         require(
             userInfo[msg.sender].role == roles.customer,
-            "Only Customer Can call this function."
+            "Only Customer !"
         );
         medicineRecievedAtCustomer(_address, cid);
     }
@@ -293,10 +273,9 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
         require(
             userInfo[msg.sender].role == roles.customer &&
             msg.sender == Medicine(_address).getWDC()[2],
-            "Only Customer or current owner of package can call this function"
+            "Only Customer or current owner of package !"
         );
         require(sale[_address] == salestatus(1), "Medicine Must be at Customer");
-        
         updateSaleStatus(_address, Status);
     }
 
@@ -314,7 +293,7 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     function getBatchesCountC() external view returns(uint count) {
         require(
             userInfo[msg.sender].role == roles.customer,
-            "Only Wholesaler or current owner of package can call this function"
+            "Only Wholesaler or current owner of package !"
         );
         return  MedicineBatchAtCustomer[msg.sender].length;
     }
@@ -322,13 +301,8 @@ contract SupplyChain is Supplier, Transporter, Manufacturer, Wholesaler, Distrib
     function getBatchIdByIndexC(uint index) external view returns(address _address) {
         require(
             userInfo[msg.sender].role == roles.customer,
-            "Only Wholesaler or current owner of package can call this function"
+            "Only Wholesaler or current owner of package !"
         );
         return MedicineBatchAtCustomer[msg.sender][index];
     }
-    
-    // function verify(address p, bytes32 hash, uint8 v, bytes32 r, bytes32 s) external view returns(bool) {
-    //     return ecrecover(hash, v, r, s) == p;
-    // }
-}    
-    
+}        

@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 
 import './RawMaterial.sol';
 
@@ -6,7 +7,7 @@ contract Supplier {
     
     mapping (address => address[]) public supplierRawMaterials;
     
-    constructor() public {}
+    constructor() {}
     
     function createRawMaterialPackage(
         bytes32 _description,
@@ -17,7 +18,7 @@ contract Supplier {
 
         RawMaterial rawMaterial = new RawMaterial(
             msg.sender,
-            address(bytes20(sha256(abi.encodePacked(msg.sender, now)))),
+            address(bytes20(sha256(abi.encodePacked(msg.sender, block.timestamp)))),
             _description,
             _quantity,
             _transporterAddr,

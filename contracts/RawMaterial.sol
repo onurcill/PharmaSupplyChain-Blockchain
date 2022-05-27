@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 import './Transactions.sol';
@@ -34,7 +35,7 @@ contract RawMaterial {
         uint _quantity,
         address _transporterAddr,
         address _manufacturerAddr
-    ) public {
+    ) {
         Owner = _creatorAddr;
         productid = _productid;
         description = _description;

@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 
 import './MedicineW_D.sol';
 import './Medicine.sol';
@@ -9,7 +10,7 @@ contract Wholesaler {
     mapping(address => address[]) public MedicineWtoD;
     mapping(address => address) public MedicineWtoDTxContract;
     
-    constructor() public {}
+    constructor() {}
     
     function medicineRecievedAtWholesaler(
         address _address

@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 
 import './RawMaterial.sol';
 import './Medicine.sol';
@@ -8,7 +9,7 @@ contract Manufacturer {
     mapping (address => address[]) public manufacturerRawMaterials;
     mapping (address => address[]) public manufacturerMedicines;
 
-    constructor() public {}
+    constructor() {}
     
     function manufacturerReceivedPackage(
         address _addr,

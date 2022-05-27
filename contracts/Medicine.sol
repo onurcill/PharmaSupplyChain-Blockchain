@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 
 import './Transactions.sol';
 
@@ -44,7 +45,7 @@ contract Medicine {
         address[] memory _transporterAddr,
         address _receiverAddr,
         uint RcvrType
-    ) public {
+    ) {
         Owner = _manufacturerAddr;
         manufacturer = _manufacturerAddr;
         description = _description;

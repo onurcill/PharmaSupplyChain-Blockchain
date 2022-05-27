@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 import './RawMaterial.sol';
@@ -19,7 +20,7 @@ contract SupplyChain {
     
     address Owner;
     
-    constructor() public {
+    constructor() {
         Owner = msg.sender;
     }
     
@@ -89,7 +90,7 @@ contract SupplyChain {
     mapping (address => address[]) public supplierRawMaterials;
     
     function respondToManufacturer(address buyer, address seller, address packageAddr, bytes memory signature) external {
-        emit respondEvent(buyer, seller, packageAddr, signature, now);
+        emit respondEvent(buyer, seller, packageAddr, signature, block.timestamp);
     }
     
     function createRawMaterialPackage(
@@ -101,7 +102,7 @@ contract SupplyChain {
 
         RawMaterial rawMaterial = new RawMaterial(
             msg.sender,
-            address(bytes20(sha256(abi.encodePacked(msg.sender, now)))),
+            address(bytes20(sha256(abi.encodePacked(msg.sender, block.timestamp)))),
             _description,
             _quantity,
             _transporterAddr,
@@ -165,7 +166,7 @@ contract SupplyChain {
     mapping (address => address[]) public manufacturerMedicines;
     
     function requestRawMaterial(address supplierAddr, address manuAddr, address rawMaterialAddr, bytes memory signature) external {
-        emit buyEvent(supplierAddr, manuAddr, rawMaterialAddr, signature, now);
+        emit buyEvent(supplierAddr, manuAddr, rawMaterialAddr, signature, block.timestamp);
     }
 
     
@@ -178,7 +179,7 @@ contract SupplyChain {
             
         RawMaterial(_addr).receivedPackage(_manufacturerAddress);
         manufacturerRawMaterials[_manufacturerAddress].push(_addr);
-        emit receivedEvent(msg.sender, _sellerAddr, _addr, signature, now);
+        emit receivedEvent(msg.sender, _sellerAddr, _addr, signature, block.timestamp);
     }
     
     

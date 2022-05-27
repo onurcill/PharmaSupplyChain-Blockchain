@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 contract Transactions {
@@ -18,14 +19,14 @@ contract Transactions {
     mapping(uint => txns) public transactions;
     uint public txnCount = 0;
     
-    constructor(address _creator) public {
+    constructor(address _creator) {
         Creator = _creator;
     }
     
     event txnCreated(bytes32 _txnHash, address _from, address _to, bytes32 _prev, uint _timestamp, string _latitude, string _longitude);
     
     function createTxnEntry(bytes32 _txnHash, address _from, address _to, bytes32 _prev, string memory _latitude, string memory _longitude) public {
-        uint _timestamp = now;
+        uint _timestamp = block.timestamp;
         if(txnCount == 0) {
             transactions[txnCount] = txns(_txnHash, _from, _to, _prev, _latitude, _longitude, _timestamp);
         } else {

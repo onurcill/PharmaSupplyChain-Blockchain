@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.9.0;
 
 import './Medicine.sol';
 
@@ -19,7 +20,7 @@ contract MedicineW_D {
         address Sender,
         address Transporter,
         address Receiver
-    ) public {
+    ) {
         Owner = Sender;
         medId = _address;
         sender = Sender;
